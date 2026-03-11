@@ -27,8 +27,8 @@ CMD_RUNUSER="/usr/sbin/runuser"
 # =========================================
 
 # 遍历补光灯亮度范围设置
-START=5
-END=45
+START=0
+END=40
 STEP=10
 SLEEP_TIME=1 # 每个亮度停留的秒数
 
@@ -68,7 +68,7 @@ fi
       echo "$($CMD_DATE): Camera BUSY! Waiting for stabilization..." >>"$LOG_FILE"
 
       # 延时确保 howdy 的红外摄像头先打开（须根据 howdy config 的 frame_wait 调整）
-      $CMD_SLEEP 0.6
+      $CMD_SLEEP 0.4
 
       if [ "$CURRENT_USER" = "root" ]; then
         echo "Root detected. Using runuser to target $TARGET_USER." >>"$LOG_FILE"
