@@ -26,21 +26,19 @@ VIDEO_DEVICE="/dev/video2"
 CMD_RUNUSER="/usr/sbin/runuser"
 # =========================================
 
-# 遍历补光灯亮度范围设置
-START=0
-END=40
-STEP=10
-SLEEP_TIME=1 # 每个亮度停留的秒数
+# 固定亮度序列与每档停留时间
+BRIGHTNESS_LEVELS=(0 5 10 20 30 40)
+SLEEP_TIME=0.7 # 每个亮度停留的秒数
 
 # =========================================
 try_light() {
-  for ((val = $START; val <= $END; val += $STEP)); do
+  for val in "${BRIGHTNESS_LEVELS[@]}"; do
     # 使用 sed 匹配 control = [...] 并替换为新的数值
     # 这里的正则专门针对你提供的 toml 格式
     sudo sed -i "s/control = \[.*\]/control = [$val]/" "$CONFIG_FILE"
     # 应用配置
     $CMD_RUNUSER -u "$TARGET_USER" -- "$CMD_IR" run >>"$LOG_FILE" 2>&1
-    sleep $SLEEP_TIME
+    $CMD_SLEEP "$SLEEP_TIME"
   done
 }
 
@@ -68,7 +66,7 @@ fi
       echo "$($CMD_DATE): Camera BUSY! Waiting for stabilization..." >>"$LOG_FILE"
 
       # 延时确保 howdy 的红外摄像头先打开（须根据 howdy config 的 frame_wait 调整）
-      $CMD_SLEEP 0.4
+      $CMD_SLEEP 0.5
 
       if [ "$CURRENT_USER" = "root" ]; then
         echo "Root detected. Using runuser to target $TARGET_USER." >>"$LOG_FILE"
@@ -84,5 +82,8 @@ fi
   done
 
   echo "$($CMD_DATE): Timeout (No camera usage detected)." >>"$LOG_FILE"
+) &
+exit 0
+FILE"
 ) &
 exit 0
