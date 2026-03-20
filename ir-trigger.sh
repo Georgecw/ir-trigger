@@ -5,14 +5,14 @@
 TARGET_USER="george"
 
 # 2. 你的摄像头路径
-DEVICE="/dev/v4l/by-path/pci-0000:00:14.0-usbv2-0:4:1.2-video-index0"
+DEVICE="/dev/video0"
 
 # 3. 命令的绝对路径 (使用 which 确认)
 CMD_FUSER="/usr/bin/fuser"
 CMD_SLEEP="/usr/bin/sleep"
 CMD_DATE="/usr/bin/date"
 CMD_SU="/usr/bin/su"
-CMD_IR="/home/george/.local/bin/linux-enable-ir-emitter"
+CMD_IR="/usr/local/bin/linux-enable-ir-emitter"
 
 # 日志文件
 LOG_FILE="/tmp/pam_ir_debug.log"
@@ -82,8 +82,5 @@ fi
   done
 
   echo "$($CMD_DATE): Timeout (No camera usage detected)." >>"$LOG_FILE"
-) &
-exit 0
-FILE"
 ) &
 exit 0
